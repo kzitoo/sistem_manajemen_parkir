@@ -76,6 +76,7 @@ public class parkirMotor {
                     return;
                 default:
                     System.out.println("Pilihan Tidak Valid, Coba Ulangi Lagi!");
+                    pause(input);
             }
         }
     }
@@ -181,6 +182,7 @@ public class parkirMotor {
                 break;
             default:
                 System.out.println("Pilihan Tidak Valid, Coba Ulangi Lagi!");
+                pause(input);
             }
         }
     }
