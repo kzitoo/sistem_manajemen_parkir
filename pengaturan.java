@@ -1,4 +1,3 @@
-import java.lang.reflect.Parameter;
 import java.util.Scanner;
 
 public class pengaturan {
