@@ -166,7 +166,7 @@ public class parkirMobil {
 
     void hapusMobil(Scanner input) {
         System.out.print("\nMasukkan Plat Mobil Yang Akan Keluar: ");
-        String platKeluar = input.nextLine();
+        String platKeluar = input.nextLine().toUpperCase();
 
         for (int i = 0; i < jumlahLantai; i++) {
             for (int j = 0; j < jumlahSlot; j++) {
