@@ -8,6 +8,8 @@ public class parkirMobil {
     private boolean[][] statusParkir = new boolean[jumlahLantai][jumlahSlot];;
     private String[][] nomorPlat = new String[jumlahLantai][jumlahSlot];
 
+    private boolean isOn = true;
+
     public int getJumlahLantai() {
         return jumlahLantai;
     }
@@ -32,6 +34,14 @@ public class parkirMobil {
     void pause(Scanner input) {
         System.out.print("\nTekan ENTER untuk kembali ke menu...");
         input.nextLine();
+    }
+
+    public boolean getStatusOn(){
+        return isOn;
+    }
+
+    public void setAuto(boolean isOnParamter){
+        this.isOn = isOnParamter;
     }
 
     void menuPertama() {
@@ -82,20 +92,59 @@ public class parkirMobil {
     }
 
     void tambahMobil(Scanner input) {
-        for (int i = 0; i < jumlahLantai; i++) {
-            for (int j = 0; j < jumlahSlot; j++) {
-                if (!statusParkir[i][j]) {
-                    System.out.print("\nMasukkan Nomor Plat: ");
-                    nomorPlat[i][j] = input.nextLine();
-                    statusParkir[i][j] = true;
-                    System.out.println("Berhasil Parkir di Lantai " + (i + 1) + " Slot " + (j + 1));
-                    pause(input);
-                    return;
+        if(isOn){        
+            for (int i = 0; i < jumlahLantai; i++) {
+                for (int j = 0; j < jumlahSlot; j++) {
+                    if (!statusParkir[i][j]) {
+                        System.out.print("\nMasukkan Nomor Plat: ");
+                        nomorPlat[i][j] = input.nextLine();
+                        statusParkir[i][j] = true;
+                        System.out.println("Berhasil Parkir di Lantai " + (i + 1) + " Slot " + (j + 1));
+                        pause(input);
+                        return;
+                    }
                 }
             }
+            System.out.println("Parkiran Penuh!");
+            pause(input);
+        }else{
+            System.out.println("\nMasukan Lantai dan Slot Yang Anda Pilih (contoh: L1 S1): ");
+            String pilLantai = input.next();
+            String pilSlot = input.next();
+            input.nextLine();
+
+            int lantai = 0;
+            int slot = 0;
+
+            if (pilLantai.startsWith("L")) {
+                lantai = Integer.parseInt(pilLantai.substring(1)) - 1;
+            } else if (pilLantai.startsWith("S")) {
+                slot = Integer.parseInt(pilLantai.substring(1)) - 1;
+            }
+
+            // token kedua
+            if (pilSlot.startsWith("L")) {
+                lantai = Integer.parseInt(pilSlot.substring(1)) - 1;
+            } else if (pilSlot.startsWith("S")) {
+                slot = Integer.parseInt(pilSlot.substring(1)) - 1;
+            }
+
+            if(lantai < 0 || slot < 0){
+                System.out.println("Slot Parkir Tidak Tersedia!");
+                pause(input);
+                return;
+            }
+
+            if(statusParkir[lantai][slot]){
+                System.out.println("Slot Parkir Tidak Tersedia!");
+                pause(input);
+                return;
+            }
+
+            System.out.print("Masukan Nomor Plat: ");
+            nomorPlat[lantai][slot] = input.nextLine();
+            statusParkir[lantai][slot] = true;
         }
-        System.out.println("Parkiran Penuh!");
-        pause(input);
     }
 
     void hapusMobil(Scanner input) {

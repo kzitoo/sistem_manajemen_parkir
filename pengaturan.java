@@ -1,3 +1,4 @@
+import java.lang.reflect.Parameter;
 import java.util.Scanner;
 
 public class pengaturan {
@@ -89,6 +90,40 @@ public class pengaturan {
         }
     }
 
+    void autoParkir(Scanner input){
+        boolean runningPilihan3 = true;
+        boolean isOn = parkirMobil.getStatusOn();
+        while (runningPilihan3) {
+            System.out.printf("\nFitur Auto Parkir Anda Saat Ini Sedang %s", isOn? "Aktif" : "Nonaktif");
+            System.out.printf("\nApakah Anda Ingin %s ? (y/n): ", isOn? "Menonaktifkan-nya" : "Mengaktifkan-nya");
+
+            char inputPilihan = input.next().charAt(0);
+            input.nextLine();
+            if(isOn){
+                if(inputPilihan == 'y'){
+                    isOn = false;
+                    parkirMobil.setAuto(isOn);
+                    System.out.printf("\nFitur Auto Parkir Anda Sudah %s", isOn? "Aktif" : "Nonaktif");
+                    runningPilihan3 = false;
+                }else{
+                    pause(input);
+                    return;
+                }
+            }else{
+                if(inputPilihan == 'y'){
+                    isOn = true;
+                    parkirMobil.setAuto(isOn);
+                    System.out.printf("\nFitur Auto Parkir Anda Sudah %s", isOn? "Aktif" : "Nonaktif");
+                    runningPilihan3 = false;
+                }else{
+                    pause(input);
+                    return;
+                }
+            }
+        }
+        pause(input);
+    }
+
     public void pengaturanParkir() {
         Scanner input = new Scanner(System.in);
         boolean runningPengaturan = true;
@@ -99,8 +134,9 @@ public class pengaturan {
             garisBatas.garis();
             System.out.println("1. Ubah Jumlah Lantai Parkir");
             System.out.println("2. Ubah Jumlah Slot Parkir per Lantai");
-            System.out.println("3. Kembali ke Menu Utama");
-            System.out.print("Masukkan Pilihan Anda (1-3): ");
+            System.out.println("3. Auto Parkir Kendaraan");
+            System.out.println("4. Kembali ke Menu Utama");
+            System.out.print("Masukkan Pilihan Anda (1-4): ");
 
             int pilihan = input.nextInt();
             input.nextLine();
@@ -113,6 +149,9 @@ public class pengaturan {
                     ubahSlotParkir(input);
                     break;
                 case 3:
+                    autoParkir(input);
+                    break;
+                case 4:
                     runningPengaturan = false;
                     break;
 
