@@ -1,12 +1,21 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.Duration;
+
 import java.util.Scanner;
 
 public class parkirMobil {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+
     boolean isRunning = true;
 
     private int jumlahLantai = 2;
     private int jumlahSlot = 5;
+    private String[][] noTiket = new String[jumlahLantai][jumlahSlot];
     private boolean[][] statusParkir = new boolean[jumlahLantai][jumlahSlot];;
     private String[][] nomorPlat = new String[jumlahLantai][jumlahSlot];
+    private LocalDateTime[][] waktuMasuk = new LocalDateTime[jumlahLantai][jumlahSlot];
 
     private boolean isOn = true;
 
@@ -97,9 +106,13 @@ public class parkirMobil {
                 for (int j = 0; j < jumlahSlot; j++) {
                     if (!statusParkir[i][j]) {
                         System.out.print("\nMasukkan Nomor Plat: ");
-                        nomorPlat[i][j] = input.nextLine();
+                        nomorPlat[i][j] = input.nextLine().toUpperCase();
+                        noTiket[i][j] = "L" + (i + 1) + "S" + (j + 1) + LocalDateTime.now().getYear();;
                         statusParkir[i][j] = true;
-                        System.out.println("Berhasil Parkir di Lantai " + (i + 1) + " Slot " + (j + 1));
+                        waktuMasuk[i][j] = LocalDateTime.now();
+
+                        String waktuMasukStr = waktuMasuk[i][j].format(formatter);
+                        cetakTiket.tiketMasuk(noTiket[i][j], nomorPlat[i][j], "Mobil", i + 1, j + 1, waktuMasukStr);
                         pause(input);
                         return;
                     }
@@ -122,7 +135,6 @@ public class parkirMobil {
                 slot = Integer.parseInt(pilLantai.substring(1)) - 1;
             }
 
-            // token kedua
             if (pilSlot.startsWith("L")) {
                 lantai = Integer.parseInt(pilSlot.substring(1)) - 1;
             } else if (pilSlot.startsWith("S")) {
@@ -140,10 +152,15 @@ public class parkirMobil {
                 pause(input);
                 return;
             }
-
             System.out.print("Masukan Nomor Plat: ");
-            nomorPlat[lantai][slot] = input.nextLine();
+            nomorPlat[lantai][slot] = input.nextLine().toUpperCase();
+            noTiket[lantai][slot] = "L" + (lantai + 1) + "S" + (slot + 1) + LocalDateTime.now().getYear();;
             statusParkir[lantai][slot] = true;
+            waktuMasuk[lantai][slot] = LocalDateTime.now();
+
+            String waktuMasukStr = waktuMasuk[lantai][slot].format(formatter);
+            cetakTiket.tiketMasuk(noTiket[lantai][slot], nomorPlat[lantai][slot], "Mobil", lantai + 1, slot + 1, waktuMasukStr);
+            pause(input);
         }
     }
 
@@ -154,9 +171,25 @@ public class parkirMobil {
         for (int i = 0; i < jumlahLantai; i++) {
             for (int j = 0; j < jumlahSlot; j++) {
                 if (statusParkir[i][j] && nomorPlat[i][j].equals(platKeluar)) {
+                    String waktuMasukStr = waktuMasuk[i][j].format(formatter);
+                    String waktuKeluarStr = LocalDateTime.now().format(formatter);
+                    Duration durasiParkir = Duration.between(waktuMasuk[i][j], LocalDateTime.now());
+                    long durasiParkirInMinute = durasiParkir.toMinutes();
+                    long totalJam = (durasiParkirInMinute + 59) / 60;
+
+                    int totalTarif;
+                    if (totalJam <= 1) {
+                        totalTarif = 7000;
+                    } else {
+                        totalTarif = 7000 + (int)(totalJam - 1) * 5000;
+                    }
+
+                    cetakTiket.tiketKeluar(noTiket[i][j], nomorPlat[i][j], "Mobil", i + 1, j + 1, waktuMasukStr, waktuKeluarStr, totalTarif);
+
+                    noTiket[i][j] = null;
                     statusParkir[i][j] = false;
                     nomorPlat[i][j] = null;
-                    System.out.println("Mobil Dengan Plat " + platKeluar + " Telah Keluar Dari Parkiran.");
+                    waktuMasuk[i][j] = null;
                     pause(input);
                     return;
                 }
@@ -168,12 +201,13 @@ public class parkirMobil {
 
     void detailParkir(Scanner input) {
         System.out.print("\nMasukkan Nomor Plat Mobil Yang Akan Dicek: ");
-        String platDetail = input.nextLine();
+        String platDetail = input.nextLine().toUpperCase();
 
         for (int i = 0; i < jumlahLantai; i++) {
             for (int j = 0; j < jumlahSlot; j++) {
                 if (statusParkir[i][j] && nomorPlat[i][j].equals(platDetail)) {
-                    System.out.println("Mobil Dengan Plat " + platDetail + " Berada Di Lantai " + (i + 1) + " Slot " + (j + 1));
+                    String waktuMasukStr = waktuMasuk[i][j].format(formatter);
+                    cetakTiket.tiketMasuk(noTiket[i][j], nomorPlat[i][j], "Mobil", i + 1, j + 1, waktuMasukStr);
                     pause(input);
                     return;
                 }
