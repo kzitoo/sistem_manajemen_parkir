@@ -78,9 +78,10 @@ public class parkirMotor {
             garisBatas.garis(); // Memanggil Method garis di Class garisBatas //
             System.out.println("1. Tambah Motor Masuk");
             System.out.println("2. Keluarkan Motor");
-            System.out.println("3. Lihat Detail Parkir");
-            System.out.println("4. Kembali");
-            System.out.print("Masukkan Pilihan Anda (1-4): ");
+            System.out.println("3. Edit Data Kendaraan");
+            System.out.println("4. Lihat Detail Parkir");
+            System.out.println("5. Kembali");
+            System.out.print("Masukkan Pilihan Anda (1-5): ");
 
             int pilihan = input.nextInt();  // Meminta Inputan Pilihan Menu //
             input.nextLine();
@@ -92,10 +93,13 @@ public class parkirMotor {
                 case 2:  // Jika Pilihan = 2 //
                     hapusMotor(input);  // Memanggil Method hapusMotor //
                     break;
-                case 3:  // Jika Pilihan = 3 //
+                case 3:
+                    editMotor(input);
+                    break;
+                case 4:  // Jika Pilihan = 3 //
                     detailParkir(input); // Memanggil Method detailParkir //
                     break;
-                case 4:  // Jika Pilihan = 4 //
+                case 5:  // Jika Pilihan = 4 //
                     isMenuPertamaRunning = false; // Nilai Varibel isMenuPertamaRunning di Assign "False"
                     break;
                 default: // Jika Pilihan Bukan 1-4 //
@@ -232,6 +236,25 @@ public class parkirMotor {
         }
         System.out.println("Motor Dengan Plat " + platKeluar + " Tidak Ditemukan di Parkiran.");
         pause(input);  // Memanggil Method pause // 
+    }
+
+    void editMotor(Scanner input){
+        System.out.print("\nMasukan Nomor Plat Motor Yang Akan DiEdit: ");
+        String noPlat = input.nextLine().toUpperCase();
+
+        for (int i = 0; i < jumlahLantai; i++) {
+            for (int j = 0; j < jumlahSlot; j++) {
+                if (statusParkir[i][j] && nomorPlat[i][j].equals(noPlat)){
+                    System.out.print("Masukan Nomor Plat Motor Yang Baru: ");
+                    nomorPlat[i][j] = input.nextLine().toUpperCase();
+                    System.out.println("\nNomor Plat Berhasil Diubah Menjadi " + nomorPlat[i][j]);
+                    pause(input);
+                    return;
+                }
+            }
+        }
+        System.out.println("Motor Dengan Plat " + noPlat + " Tidak Ditemukan di Parkiran.");
+        pause(input); // Memanggil Method pause //
     }
 
     void detailParkir(Scanner input) {
