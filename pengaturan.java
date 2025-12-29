@@ -55,7 +55,7 @@ public class pengaturan {
                 case 3: // Jika Pilihan = 3 //
                     runningPilihan1 = false; // Menghentikan Perulangan //
                     break;
-
+                    
                 default: // Jika Pilihan Bukan 1-3 //
                     System.out.println("Pilihan Tidak Valid, Coba Ulangi Lagi!");
                     pause(input); // Memanggil Method pause //
@@ -69,7 +69,7 @@ public class pengaturan {
         boolean runningPilihan2 = true; // Deklarasi Variabel runningPilihan2 Dengan Value "True" //
         while (runningPilihan2) { // Kode Dijalankan Selama Variabel runningPilihan2 Bernilai "True" //
             clearConsole.clear(); // Memanggil Method clear Di Class clearConsole //
-            System.out.println("\n======== UBAH JUMLAH LANTAI PARKIR ========");
+            System.out.println("\n======== UBAH JUMLAH SLOT PARKIR ========");
             garisBatas.garis(); // Memanggil Method garis Di Class garisBatas //
             System.out.println("1. Ubah Jumlah Slot Parkir Mobil");
             System.out.println("2. Ubah Jumlah Slot Parkir Motor");
